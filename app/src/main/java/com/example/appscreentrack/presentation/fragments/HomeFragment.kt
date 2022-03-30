@@ -27,7 +27,7 @@ import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.*
 
 class HomeFragment : Fragment() {
-    private val isPremium: Boolean = true
+    private val isPremium: Boolean = false
     private lateinit var binding: FragmentHomeBinding
     private lateinit var horizontalCalendarAdapter: CalendarAdapter
     private val data = getDaysOfMonth()
