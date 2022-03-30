@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E5E5E5"
+    android:orientation="vertical"
+    tools:context=".presentation.fragments.HomeFragment">
+
+    <com.example.appscreentrack.presentation.CustomToolbar
+        android:id="@+id/backAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:translationZ="0.1dp"
+        app:CustomToolbar_title="Kullanım İstatistikleri "
+        app:CustomToolbar_title_color="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/imageViewActivePin"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewHorizontalDatePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="#E5E5E5"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/date_item" />
+
+
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:autoStart="false">
+
+        <!--PROGRESS-->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:backgroundTint="@color/date_item_color"
+            app:indicatorColor="@color/date_item_color" />
+        <!--PROGRESS-->
+
+        <!--CONTENT-->
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="4dp"
+                android:visibility="visible">
+
+            </com.github.mikephil.charting.charts.PieChart>
+
+            <TextView
+                android:id="@+id/textViewApplications"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/applications"
+                android:textColor="@color/text_color_gray" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewUsageList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorSurface"
+                android:backgroundTint="#E5E5E5"
+                tools:listitem="@layout/usage_row_item" />
+        </LinearLayout>
+        <!--CONTENT-->
+
+
+        <!--PREMIUMCARD-->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardPremiumNotification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="48dp"
+            android:elevation="0dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/common_margin">
+
+                <ImageView
+                    android:id="@+id/premiumIcon"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_menu_premium"
+                    app:tint="@color/main_secondary2_100" />
+
+                <TextView
+                    android:id="@+id/premiumText1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/premiumIcon"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/become_a_premium"
+                    android:textAlignment="center"
+                    android:textColor="@color/main_secondary2_100" />
+
+                <TextView
+                    android:id="@+id/premiumText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/premiumText1"
+                    android:layout_alignStart="@+id/premiumText1"
+                    android:layout_alignEnd="@+id/premiumText1"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/get_all_past_usage_stats_and_more"
+                    android:textAlignment="center"
+                    android:textColor="@color/main_secondary2_100" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/premiumText2"
+                    android:layout_alignStart="@+id/premiumText1"
+                    android:layout_alignEnd="@+id/premiumText1"
+                    android:layout_marginTop="36dp"
+                    android:backgroundTint="@color/main_secondary2_100"
+                    android:text="Go Premium"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    app:cornerRadius="8dp" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+        <!--PREMIUMCARD-->
+
+        <!--EMPTY-->
+        <RelativeLayout
+            android:id="@+id/noDataView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:backgroundTint="@color/main_greys_40"
+            android:gravity="center_horizontal"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewHorizontalDatePicker">
+
+            <ImageView
+                android:id="@+id/emptyIcon"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/ic_intruder_empty" />
+
+            <TextView
+                android:id="@+id/emptyText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emptyIcon"
+                android:layout_alignStart="@+id/emptyIcon"
+                android:layout_alignEnd="@+id/emptyIcon"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="-72dp"
+                android:layout_marginEnd="26dp"
+                android:text="@string/no_data"
+                android:textAlignment="center"
+                android:textColor="@color/main_greys_40" />
+
+            <TextView
+                android:id="@+id/emptyText2"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emptyIcon"
+                android:layout_marginTop="3dp"
+                android:text="@string/no_any_data"
+                android:textAlignment="center"
+                android:textColor="@color/rowTextColor"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/emptyText3"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emptyIcon"
+                android:layout_marginTop="30dp"
+                android:text="@string/something_seems_to_have_gone_wrong"
+                android:textAlignment="center"
+                android:textColor="@color/main_greys_40" />
+        </RelativeLayout>
+        <!--EMPTY-->
+
+    </ViewFlipper>
+</LinearLayout>

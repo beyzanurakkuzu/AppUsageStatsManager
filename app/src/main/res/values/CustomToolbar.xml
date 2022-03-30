@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomToolbar">
+        <attr name="CustomToolbar_hasStep" format="boolean" />
+        <attr name="CustomToolbar_stepText" format="string" />
+        <attr name="CustomToolbar_title" format="string" />
+        <attr name="CustomToolbar_background" format="color" />
+        <attr name="CustomToolbar_title_color" format="color" />
+    </declare-styleable>
+</resources>
