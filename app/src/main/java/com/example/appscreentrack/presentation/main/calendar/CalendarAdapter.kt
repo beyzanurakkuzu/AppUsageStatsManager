@@ -16,6 +16,7 @@ import kotlin.collections.ArrayList
 class CalendarAdapter(val callback:((pos:Int)->Unit)) :
     RecyclerView.Adapter<CalendarItemViewHolder>() {
     private val data: ArrayList<CalendarDateModel> = ArrayList();
+    private val premium: Boolean = true
     lateinit var constraintLayoutHorizontal: ConstraintLayout
     lateinit var whiteOutLineDrawable: Drawable
     lateinit var fillOutLineDrawable: Drawable
@@ -23,7 +24,6 @@ class CalendarAdapter(val callback:((pos:Int)->Unit)) :
     companion object {
         var focusedItem: Int? = 9
     }
-
 
     fun setFillOutLine(position: Int) {
         constraintLayoutHorizontal.background = fillOutLineDrawable
@@ -55,46 +55,48 @@ class CalendarAdapter(val callback:((pos:Int)->Unit)) :
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: CalendarItemViewHolder, position: Int) {
-        holder.calendarDay.text = data[position].dayOfMonth
-        holder.calendarDate.text = data[position].dayOfWeek
-        holder.calendarMonth.text = data[position].month
-        holder.sliderImageViewPremium.bringToFront()
-        holder.sliderImageViewPremium.invalidate()
+        with(holder){
+            calendarDay.text = data[position].dayOfMonth
+            calendarDate.text = data[position].dayOfWeek
+            calendarMonth.text = data[position].month
+            sliderImageViewPremium.bringToFront()
+            sliderImageViewPremium.invalidate()
 
-        premiumVisibilityControl(
-            position,
-            holder.sliderImageViewPremium
-        )
-        constraintLayoutHorizontal = holder.constraintLayoutHorizontal
-        holder.constraintLayoutHorizontal.setOnClickListener {
-            focusedItem = position
+            premiumVisibilityControl(
+                position,
+                sliderImageViewPremium
+            )
+            this@CalendarAdapter.constraintLayoutHorizontal = constraintLayoutHorizontal
+            constraintLayoutHorizontal.setOnClickListener {
+                focusedItem = position
 
-            callback(position)
-        }
+                callback(position)
+            }
 
-         if(focusedItem != position) {
-            holder.constraintLayoutHorizontal.background =
-                whiteOutLineDrawable
+            if(focusedItem != position) {
+                constraintLayoutHorizontal.background =
+                    whiteOutLineDrawable
 
-            holder.calendarDay.setTextColor(
-                ContextCompat.getColor(holder.itemView.context,R.color.text_color_gray))
-            holder.calendarDate.setTextColor(
-                ContextCompat.getColor(holder.itemView.context,R.color.text_color_gray))
-            holder.calendarMonth.setTextColor(
-                ContextCompat.getColor(holder.itemView.context,R.color.text_color_gray))
+                calendarDay.setTextColor(
+                    ContextCompat.getColor(itemView.context,R.color.text_color_gray))
+                calendarDate.setTextColor(
+                    ContextCompat.getColor(itemView.context,R.color.text_color_gray))
+                calendarMonth.setTextColor(
+                    ContextCompat.getColor(itemView.context,R.color.text_color_gray))
 
-        }
-        else{
-            holder.constraintLayoutHorizontal.background =
-                fillOutLineDrawable
-            holder.calendarDay.setTextColor(
-                ContextCompat.getColor(holder.itemView.context, R.color.date_item_color))
-            holder.calendarDate.setTextColor(
-                ContextCompat.getColor(holder.itemView.context,R.color.date_item_color))
-            holder.calendarMonth.setTextColor(
-                ContextCompat.getColor(holder.itemView.context,R.color.date_item_color))
-        }
-    }
+            }
+            else{
+                constraintLayoutHorizontal.background =
+                    fillOutLineDrawable
+                calendarDay.setTextColor(
+                    ContextCompat.getColor(itemView.context, R.color.date_item_color))
+                calendarDate.setTextColor(
+                    ContextCompat.getColor(itemView.context,R.color.date_item_color))
+                calendarMonth.setTextColor(
+                    ContextCompat.getColor(itemView.context,R.color.date_item_color))
+            }
+        }}
+
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(data: ArrayList<CalendarDateModel>) {
@@ -104,10 +106,7 @@ class CalendarAdapter(val callback:((pos:Int)->Unit)) :
     }
     private fun premiumVisibilityControl(mPosition: Int, icPremium: ImageView) {
         when (mPosition) {
-            8 -> {
-                icPremium.visibility = View.INVISIBLE
-            }
-            9 -> {
+            8,9 -> {
                 icPremium.visibility = View.INVISIBLE
             }
             else -> {
