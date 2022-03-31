@@ -10,8 +10,7 @@ object DateUtils {
     fun getDaysOfMonth(): ArrayList<CalendarDateModel> {
         horizontalDateList.clear()
         val cal = Calendar.getInstance(TimeZone.getDefault())
-        var maxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        maxDay = 9
+        val maxDay: Int = 9
         var currentDay = cal.get(Calendar.DAY_OF_MONTH)
         val df = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         val cd = SimpleDateFormat("EE", Locale.getDefault())

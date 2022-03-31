@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#E5E5E5"
     android:orientation="vertical"
-    tools:context=".presentation.fragments.HomeFragment">
+    tools:context=".presentation.fragments.UsageStatsFragment">
 
     <com.example.appscreentrack.presentation.CustomToolbar
         android:id="@+id/backAppBar"
@@ -156,7 +156,7 @@
                     android:layout_alignEnd="@+id/premiumText1"
                     android:layout_marginTop="36dp"
                     android:backgroundTint="@color/main_secondary2_100"
-                    android:text="Go Premium"
+                    android:text="GO PREMIUM"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     app:cornerRadius="8dp" />

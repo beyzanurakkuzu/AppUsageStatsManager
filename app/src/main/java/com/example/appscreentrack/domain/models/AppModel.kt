@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 
-data class App(
+data class AppModel(
     val packageName: String,
     val appName: String,
     var iconDrawable: Drawable?
@@ -13,7 +13,7 @@ data class App(
         fun fromContext(
             context: Context,
             packageName: String
-        ): App {
+        ): AppModel {
             var appIcon: Drawable? = null
             var appName: String
             try {
@@ -25,7 +25,7 @@ data class App(
                 appName = "$packageName (uninstalled)"
             }
 
-            return App(
+            return AppModel(
                 packageName,
                 appName,
                 appIcon

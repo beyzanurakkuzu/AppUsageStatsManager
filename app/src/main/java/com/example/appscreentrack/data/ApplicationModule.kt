@@ -1,4 +1,4 @@
-package com.example.appscreentrack.presentation.main.utils
+package com.example.appscreentrack.data
 
 import android.content.Context
 import androidx.room.Room

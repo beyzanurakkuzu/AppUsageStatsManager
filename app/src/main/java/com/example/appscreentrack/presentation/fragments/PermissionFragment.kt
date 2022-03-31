@@ -46,7 +46,7 @@ class PermissionFragment : Fragment() {
         AlertDialog.Builder(requireContext())
             .setTitle("Permission")
             .setMessage("In order to use the app, " +
-                    "please grant the App Usage Access permission in settings")
+                    "please grant the AppModel Usage Access permission in settings")
             .setNegativeButton("No") { _, _ ->
                 activity?.finish()
             }

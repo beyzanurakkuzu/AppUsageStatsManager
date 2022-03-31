@@ -16,7 +16,7 @@ import org.threeten.bp.ZonedDateTime
         )
     ]
 )
-data class DayStats(
+data class DayUsageStatsModel(
     val packageName: String,
     val totalTime: Long,
     val lastUsed: Long,
