@@ -60,7 +60,6 @@ object Utils {
         context: Context
     ) {
         pieDataSet.colors = addColors(context)
-
         pieChart.description = null
         pieChart.isDrawHoleEnabled = false
         pieChart.setTouchEnabled(false)
@@ -78,5 +77,4 @@ object Utils {
         pieChart.notifyDataSetChanged()
         pieChart.invalidate()
     }
-
 }

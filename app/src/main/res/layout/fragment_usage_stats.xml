@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#E5E5E5"
     android:orientation="vertical"
-    tools:context=".presentation.fragments.HomeFragment">
+    tools:context=".presentation.fragments.UsageStatsFragment">
 
     <com.example.appscreentrack.presentation.CustomToolbar
         android:id="@+id/backAppBar"

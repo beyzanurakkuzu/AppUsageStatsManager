@@ -15,11 +15,6 @@ class CustomToolbar @JvmOverloads constructor(
 ) : ConstraintLayout(context, attributeSet) {
     private lateinit var imgBack: ImageView
     private lateinit var title: TextView
-    var appBarText: String = "Usage Stats"
-        set(value) {
-            title.text = value
-            field = value
-        }
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_custom_toolbar, this, true)

@@ -15,43 +15,41 @@ import javax.inject.Inject
 class AppUsageManager @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    enum class DayInfo { TODAY, YESTERDAY }
-
     private val usageStatsManager =
         context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager?
     private val now = ZonedDateTime.now(ZoneId.systemDefault())
     private val nowLocalDate = now.toLocalDate()
     private val appsWithDayStats = arrayListOf<DayWithDayStats>()
 
-    suspend fun getUsageList(dayWithStats: List<DayWithDayStats>): List<AppUsage> {
+    suspend fun getUsageList(dayWithStats: List<DayWithDayStats>): List<AppUsageStatsModel> {
         return withContext(Dispatchers.Default) {
-            val usageList = arrayListOf<AppUsage>()
-
+            val usageList = arrayListOf<AppUsageStatsModel>()
+            //today and OneDayAgo
             if (dayWithStats.size == 1) {
                 val today = dayWithStats[0]
-                today.dayStats.forEach {
-                    val app = App.fromContext(context, it.packageName)
+                today.dayStatsList.forEach {
+                    val app = AppModel.fromContext(context, it.packageName)
                     usageList.add(
-                        AppUsage(
+                        AppUsageStatsModel(
                             app,
                             it.totalTime,
                             it.lastUsed
                         )
                     )
                 }
-
             } else if (dayWithStats.size == 2) {
+
                 val today = dayWithStats[0]
                 val yesterday = dayWithStats[1]
 
-                today.dayStats.forEach {daystats->
-                    val app = App.fromContext(context, daystats.packageName)
-                    val yd = yesterday.dayStats.filter { it.packageName == app.packageName }
+                today.dayStatsList.forEach { daystats ->
+                    val app = AppModel.fromContext(context, daystats.packageName)
+                    val yd = yesterday.dayStatsList.filter { it.packageName == app.packageName }
                         .sumOf { it.totalTime }
                     val differenceBetweenOneDayAgoTime = daystats.totalTime - yd
-                    println("App: ${app.appName} Day : ${today.day.date}  TodayTime: ${daystats.totalTime} YesterdayTime $yd")
+                    println("AppModel: ${app.appName} Day : ${today.day.date}  TodayTime: ${daystats.totalTime} YesterdayTime $yd")
                     usageList.add(
-                        AppUsage(
+                        AppUsageStatsModel(
                             app,
                             daystats.totalTime,
                             daystats.lastUsed,
@@ -60,15 +58,13 @@ class AppUsageManager @Inject constructor(
                         )
                     )
                 }
-
             }
-
-
             return@withContext usageList.sortedByDescending { it.totalTime }
         }
     }
 
-    suspend fun getDayWithStatsForWeek(): List<DayWithDayStats> {
+    // 0..9 Day AppUsage
+    suspend fun getDayWithStatsForTenDay(): List<DayWithDayStats> {
         return withContext(Dispatchers.IO) {
             for (i in 0..9) {
                 val date =
@@ -83,7 +79,7 @@ class AppUsageManager @Inject constructor(
         date: ZonedDateTime = ZonedDateTime.now(ZoneId.systemDefault())
     ): DayWithDayStats {
 
-        val statsList = ArrayList<DayStats>()
+        val statsList = ArrayList<DayUsageStatsModel>()
         val utc = ZoneId.of("UTC")
         val defaultZone = ZoneId.systemDefault()
         val startDate = date.toLocalDate().atStartOfDay(defaultZone).withZoneSameInstant(utc)
@@ -160,7 +156,7 @@ class AppUsageManager @Inject constructor(
 
                     // If total time is more than 1 second
                     if (totalTime >= 1000) {
-                        val stats = DayStats(
+                        val stats = DayUsageStatsModel(
                             packageName,
                             totalTime,
                             lastUsed, timeStamp = 0L,

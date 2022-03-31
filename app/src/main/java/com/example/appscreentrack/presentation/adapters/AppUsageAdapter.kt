@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.appscreentrack.R
 import com.example.appscreentrack.presentation.main.utils.Utils
 import com.example.appscreentrack.databinding.UsageRowItemBinding
-import com.example.appscreentrack.domain.models.AppUsage
+import com.example.appscreentrack.domain.models.AppUsageStatsModel
 
 class AppsUsageAdapter(
-) : ListAdapter<AppUsage, AppsUsageAdapter.ViewHolder>(UsageDiffUtil()) {
+) : ListAdapter<AppUsageStatsModel, AppsUsageAdapter.ViewHolder>(UsageDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -29,38 +29,40 @@ class AppsUsageAdapter(
     inner class ViewHolder(var binding: UsageRowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(item: AppUsage) {
+        fun bind(item: AppUsageStatsModel) {
+            //app usage row items
             with(binding) {
-                textViewTotalUsageTime.text = Utils.getUsageTimeString(item.totalTime)
-                imageViewAppIcon.setImageDrawable(item.app.iconDrawable)
-                textViewAppName.text = item.app.appName
-                val dif = if (item.differenceBetweenOneDayAgoTime<0) (-1L)*item.differenceBetweenOneDayAgoTime else item.differenceBetweenOneDayAgoTime
+                totalUsageTimeTV.text = Utils.getUsageTimeString(item.totalTime)
+                appIcon.setImageDrawable(item.app.iconDrawable)
+                appNameTv.text = item.app.appName
+                //one day ago -> usageToYesterdayTV= today-yesterday
+                val dif =
+                    if (item.differenceBetweenOneDayAgoTime < 0) (-1L) * item.differenceBetweenOneDayAgoTime
+                    else item.differenceBetweenOneDayAgoTime
+
                 val difference = Utils.getUsageTimeString(dif)
+
                 if (item.oneDayAgoTime != 0L) {
-                    textViewUsageToYesterday.text = difference
+                    usageToYesterdayTV.text = difference
                     imageViewRow.isGone = false
-                    if (item.oneDayAgoTime < item.totalTime) {
-                        imageViewRow.setImageResource(R.drawable.increase)
-                    } else {
-                        imageViewRow.setImageResource(R.drawable.decrease)
-                    }
-                } else {
-                    textViewUsageToYesterday.text = "0"
+
+                    if (item.oneDayAgoTime < item.totalTime) imageViewRow.setImageResource(R.drawable.increase)
+                    else imageViewRow.setImageResource(R.drawable.decrease)
+                }
+                else {
+                    usageToYesterdayTV.text = "0"
                     imageViewRow.isGone = true
                 }
-
             }
-
         }
     }
 
-    class UsageDiffUtil : DiffUtil.ItemCallback<AppUsage>() {
-        override fun areItemsTheSame(oldItem: AppUsage, newItem: AppUsage) =
+    class UsageDiffUtil : DiffUtil.ItemCallback<AppUsageStatsModel>() {
+        override fun areItemsTheSame(oldItem: AppUsageStatsModel, newItem: AppUsageStatsModel) =
             oldItem.app.packageName == newItem.app.packageName
 
-        override fun areContentsTheSame(oldItem: AppUsage, newItem: AppUsage) =
+        override fun areContentsTheSame(oldItem: AppUsageStatsModel, newItem: AppUsageStatsModel) =
             (oldItem.app.packageName == newItem.app.packageName
                     && oldItem.totalTime == newItem.totalTime)
-
     }
 }

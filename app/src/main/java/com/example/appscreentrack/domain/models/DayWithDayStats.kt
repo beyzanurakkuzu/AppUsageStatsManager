@@ -6,9 +6,9 @@ import androidx.room.Relation
 data class DayWithDayStats(
     @Embedded val day: Day,
     @Relation(
-        entity = DayStats::class,
+        entity = DayUsageStatsModel::class,
         parentColumn = "date",
         entityColumn = "dayId"
     )
-    val dayStats: List<DayStats>
+    val dayStatsList: List<DayUsageStatsModel>
 )
