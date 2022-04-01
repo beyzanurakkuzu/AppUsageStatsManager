@@ -13,8 +13,7 @@ import com.example.appscreentrack.presentation.main.utils.TimeUtils
 import com.example.appscreentrack.databinding.UsageRowItemBinding
 import com.example.appscreentrack.domain.models.AppUsageStatsModel
 
-class AppsUsageAdapter(
-) : ListAdapter<AppUsageStatsModel, AppsUsageAdapter.ViewHolder>(UsageDiffUtil()) {
+class AppsUsageAdapter: ListAdapter<AppUsageStatsModel, AppsUsageAdapter.ViewHolder>(UsageDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)

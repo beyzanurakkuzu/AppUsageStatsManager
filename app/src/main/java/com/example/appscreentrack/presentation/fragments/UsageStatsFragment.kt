@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ViewFlipper
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -15,11 +17,11 @@ import com.example.appscreentrack.R
 import com.example.appscreentrack.presentation.adapters.AppsUsageAdapter
 import com.example.appscreentrack.presentation.main.calendar.CalendarAdapter
 import com.example.appscreentrack.databinding.FragmentUsageStatsBinding
-import com.example.appscreentrack.presentation.main.utils.AppState
+import com.example.appscreentrack.presentation.main.AppState
 import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
 import com.example.appscreentrack.presentation.main.utils.ScreenUtils
-import com.example.appscreentrack.presentation.main.utils.TimeUtils
 import com.example.appscreentrack.domain.viewmodel.UsageStatsViewModel
+import com.example.appscreentrack.presentation.main.calendar.SliderLayoutManager
 import com.example.appscreentrack.presentation.main.utils.PieCartUtils
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -34,17 +36,16 @@ class UsageStatsFragment : Fragment() {
     private var timeStamp: Long = 0
     private val usageAdapter = AppsUsageAdapter()
     private val viewModel: UsageStatsViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentUsageStatsBinding.inflate(layoutInflater)
-        setAdapter()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = binding.root
-
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,81 +57,78 @@ class UsageStatsFragment : Fragment() {
         binding.backAppBar.imgBackButtonClick {
             Navigation.findNavController(requireView()).popBackStack()
         }
+
+        setAdapter()
     }
 
+    private fun setAdapter() {
+        binding.recyclerViewUsageList.apply {
+            adapter = usageAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private fun setupViewModelObservers() {
+        viewModel.todayUsageData.observe(viewLifecycleOwner) {
+            updateView(it)
+        }
+    }
 
     //Get Calendar
     private fun initHorizontalDatePicker() {
         // Setting the padding such that the items will appear in the middle of the screen
         val padding: Int = ScreenUtils.getScreenWidth(requireActivity()) / 2 - ScreenUtils.dpToPx(
             requireContext(),
-            44
+            40
         )
-        with(binding.recyclerViewHorizontalDatePicker) {
-            setPadding(padding, 0, padding, 0)
-            val manager: RecyclerView.LayoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL, false
-            )
-            layoutManager = manager
-            setItemViewCacheSize(9)
-
-            horizontalCalendarAdapter = CalendarAdapter {
-                prepareFetchOperation(it)
+        binding.recyclerViewHorizontalDatePicker.setPadding(padding, 0, padding, 0)
+        val manager: RecyclerView.LayoutManager = SliderLayoutManager(requireContext()).apply {
+            callback = object : SliderLayoutManager.OnItemSelectedListener {
+                override fun onItemSelected(it: Int) {
+                    timeStamp = data[it].timeStamp
+                    if (isPremium) {
+                        when (it) {
+                            8,9 -> {
+                                viewModel.fetchUsageStats(timeStamp)
+                                binding.cardPremiumNotification.isGone
+                            }
+                            else -> {
+                                binding.progressBar.isGone
+                                binding.noDataView.visibility=View.INVISIBLE
+                                binding.cardPremiumNotification.visibility=View.VISIBLE
+                            }
+                        }
+                    } else {
+                        viewModel.fetchUsageStats(timeStamp)
+                        binding.cardPremiumNotification.isGone
+                    }
+                    horizontalCalendarAdapter.setFillOutLine(it)
+                }
             }
-
-            horizontalCalendarAdapter.setData(data)
+        }
+        binding.recyclerViewHorizontalDatePicker.setItemViewCacheSize(21)
+        //Setting Adapter
+        horizontalCalendarAdapter = CalendarAdapter().apply {
+            setData(data)
+            callback = object : CalendarAdapter.Callback {
+                override fun onItemClicked(position: Int) {
+                    binding.recyclerViewHorizontalDatePicker.smoothScrollToPosition(
+                        position
+                    )
+                }
+            }
             CoroutineScope(Dispatchers.IO).launch {
                 delay(260)
                 withContext(Dispatchers.Main) {
-                    prepareFetchOperation(CalendarAdapter.focusedItem!!)
+                    binding.recyclerViewHorizontalDatePicker.smoothScrollToPosition(CalendarAdapter.focusedItem!!)
                 }
             }
+        }
+
+        binding.recyclerViewHorizontalDatePicker.apply {
             adapter = horizontalCalendarAdapter
+            layoutManager = manager
         }
-    }
-
-    //Premium Control
-    private fun prepareFetchOperation(it: Int) {
-        println("clickedhoritem")
-        binding.recyclerViewHorizontalDatePicker.smoothScrollToPosition(
-            it
-        )
-        println("onItemSelected $it")
-
-        timeStamp = data[it].timeStamp
-        binding.flipper.switch(binding.progressBar)
-        when (it) {
-            8, 9 -> viewModel.fetchUsageStats(timeStamp)
-            else -> if (isPremium)
-                viewModel.fetchUsageStats(timeStamp)
-            else
-                binding.flipper.switch(binding.cardPremiumNotification)
-        }
-        horizontalCalendarAdapter.setFillOutLine(it)
-    }
-
-    //Graphic
-    private fun setPieChart(appNames: HashMap<String, Float>) {
-        val pieChart = binding.pieChart
-        val pieChartEntry = ArrayList<PieEntry>()
-        val sortedAppNames =
-            appNames.toList().sortedBy { (_, v) -> v }.toMap()
-
-        for (i in sortedAppNames) {
-            pieChartEntry.add(PieEntry(i.value, i.key))
-        }
-        val pieDataSet = PieDataSet(pieChartEntry, "")
-        val pieData = PieData(pieDataSet)
-
-        PieCartUtils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
-    }
-
-
-    private fun setupViewModelObservers() {
-        viewModel.todayUsageData.observe(viewLifecycleOwner, {
-            updateView(it)
-        })
     }
 
     //switch with update
@@ -147,20 +145,30 @@ class UsageStatsFragment : Fragment() {
                 }
             }
             is AppState.Error -> binding.flipper.switch(binding.noDataView)
-            else -> {throw AssertionError()}
+            else -> { }
         }
     }
 
-    private fun setAdapter() {
-        binding.recyclerViewUsageList.apply {
-            adapter = usageAdapter
-            layoutManager = LinearLayoutManager(context)
+    //Pie Chart
+    private fun setPieChart(appNames: HashMap<String, Float>) {
+        val pieChart = binding.pieChart
+        val pieChartEntry = ArrayList<PieEntry>()
+        val sortedAppNames =
+            appNames.toList().sortedBy { (_, v) -> v }.toMap()
+
+        for (i in sortedAppNames) {
+            pieChartEntry.add(PieEntry(i.value, i.key))
         }
+        val pieDataSet = PieDataSet(pieChartEntry, "")
+        val pieData = PieData(pieDataSet)
+
+        PieCartUtils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
     }
+
 }
+
 
 fun ViewFlipper.switch(v: View) {
     while (currentView != v)
         showNext()
 }
-

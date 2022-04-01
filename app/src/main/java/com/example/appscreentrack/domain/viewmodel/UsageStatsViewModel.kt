@@ -3,7 +3,7 @@ package com.example.appscreentrack.domain.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.appscreentrack.presentation.main.utils.AppState
+import com.example.appscreentrack.presentation.main.AppState
 import com.example.appscreentrack.domain.repository.UsageStatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
