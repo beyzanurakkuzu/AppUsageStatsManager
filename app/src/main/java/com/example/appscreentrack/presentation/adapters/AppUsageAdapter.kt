@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appscreentrack.R
-import com.example.appscreentrack.presentation.main.utils.Utils
+import com.example.appscreentrack.presentation.main.utils.TimeUtils
 import com.example.appscreentrack.databinding.UsageRowItemBinding
 import com.example.appscreentrack.domain.models.AppUsageStatsModel
 
@@ -32,7 +32,7 @@ class AppsUsageAdapter(
         fun bind(item: AppUsageStatsModel) {
             //app usage row items
             with(binding) {
-                totalUsageTimeTV.text = Utils.getUsageTimeString(item.totalTime)
+                totalUsageTimeTV.text = TimeUtils.getUsageTimeString(item.totalTime)
                 appIcon.setImageDrawable(item.app.iconDrawable)
                 appNameTv.text = item.app.appName
                 //one day ago -> usageToYesterdayTV= today-yesterday
@@ -40,7 +40,7 @@ class AppsUsageAdapter(
                     if (item.differenceBetweenOneDayAgoTime < 0) (-1L) * item.differenceBetweenOneDayAgoTime
                     else item.differenceBetweenOneDayAgoTime
 
-                val difference = Utils.getUsageTimeString(dif)
+                val difference = TimeUtils.getUsageTimeString(dif)
 
                 if (item.oneDayAgoTime != 0L) {
                     usageToYesterdayTV.text = difference

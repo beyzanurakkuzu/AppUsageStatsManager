@@ -109,7 +109,7 @@ class AppUsageManager @Inject constructor(
                 val pm = context.packageManager
 
                 if (pm.getLaunchIntentForPackage(packageName) != null) {
-                    var startTime = 0L
+                    var startTime=0L
                     var endTime = 0L
                     var totalTime = 0L
                     var lastUsed = 0L
@@ -152,7 +152,6 @@ class AppUsageManager @Inject constructor(
                         lastUsed = timeEndMillis
                         totalTime += lastUsed - startTime
                     }
-
 
                     // If total time is more than 1 second
                     if (totalTime >= 1000) {

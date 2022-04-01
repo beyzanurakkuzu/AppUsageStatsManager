@@ -18,8 +18,9 @@ import com.example.appscreentrack.databinding.FragmentUsageStatsBinding
 import com.example.appscreentrack.presentation.main.utils.AppState
 import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
 import com.example.appscreentrack.presentation.main.utils.ScreenUtils
-import com.example.appscreentrack.presentation.main.utils.Utils
+import com.example.appscreentrack.presentation.main.utils.TimeUtils
 import com.example.appscreentrack.domain.viewmodel.UsageStatsViewModel
+import com.example.appscreentrack.presentation.main.utils.PieCartUtils
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -61,7 +62,7 @@ class UsageStatsFragment : Fragment() {
     //Get Calendar
     private fun initHorizontalDatePicker() {
         // Setting the padding such that the items will appear in the middle of the screen
-        val padding: Int = ScreenUtils.getScreenWidth(requireContext()) / 2 - ScreenUtils.dpToPx(
+        val padding: Int = ScreenUtils.getScreenWidth(requireActivity()) / 2 - ScreenUtils.dpToPx(
             requireContext(),
             44
         )
@@ -85,10 +86,8 @@ class UsageStatsFragment : Fragment() {
                     prepareFetchOperation(CalendarAdapter.focusedItem!!)
                 }
             }
-
             adapter = horizontalCalendarAdapter
         }
-
     }
 
     //Premium Control
@@ -124,7 +123,7 @@ class UsageStatsFragment : Fragment() {
         val pieDataSet = PieDataSet(pieChartEntry, "")
         val pieData = PieData(pieDataSet)
 
-        Utils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
+        PieCartUtils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
     }
 
 
@@ -148,6 +147,7 @@ class UsageStatsFragment : Fragment() {
                 }
             }
             is AppState.Error -> binding.flipper.switch(binding.noDataView)
+            else -> {throw AssertionError()}
         }
     }
 

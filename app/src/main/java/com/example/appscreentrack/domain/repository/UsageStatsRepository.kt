@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.appscreentrack.presentation.AppUsageManager
 import com.example.appscreentrack.data.database.StatsDao
 import com.example.appscreentrack.domain.models.UsageListModel
-import com.example.appscreentrack.presentation.main.utils.Utils
+import com.example.appscreentrack.presentation.main.utils.TimeUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -18,8 +18,8 @@ class UsageStatsRepository @Inject constructor(
 
     suspend fun getCurrentDayUsageData(millis: Long): Flow<UsageListModel> {
 
-        val clickedDay = Utils.getZonedDateTime(millis , ChronoUnit.DAYS)
-        val oneDayAgo = Utils.getZonedDateTime(millis-24*60*60*1000 , ChronoUnit.DAYS)
+        val clickedDay = TimeUtils.getZonedDateTime(millis , ChronoUnit.DAYS)
+        val oneDayAgo = TimeUtils.getZonedDateTime(millis-24*60*60*1000 , ChronoUnit.DAYS)
 
         return statsDao.getClickedDayWithUsageStats(clickedDay,oneDayAgo).filterNotNull().map { dayWithStats ->
             UsageListModel(
