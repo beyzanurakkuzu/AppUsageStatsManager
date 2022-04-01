@@ -55,7 +55,6 @@ class PermissionFragment : Fragment() {
             }
             .create().show()
     }
-
     private fun hasUsageAccessPermission(): Boolean {
         val appOpsManager = context?.getSystemService(
             Context.APP_OPS_SERVICE
@@ -76,7 +75,6 @@ class PermissionFragment : Fragment() {
         }
         return mode == AppOpsManager.MODE_ALLOWED
     }
-
     private fun openSettings() {
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         if(intent.resolveActivity(requireActivity().packageManager) != null) {

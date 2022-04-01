@@ -1,4 +1,4 @@
-package com.example.appscreentrack.presentation.main.utils
+package com.example.appscreentrack.presentation.main
 
 import com.example.appscreentrack.domain.models.AppUsageStatsModel
 
