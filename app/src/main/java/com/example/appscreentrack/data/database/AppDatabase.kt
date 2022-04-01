@@ -7,7 +7,7 @@ import com.example.appscreentrack.data.Converters
 import com.example.appscreentrack.domain.models.Day
 import com.example.appscreentrack.domain.models.DayUsageStatsModel
 
-@Database(entities = [Day::class, DayUsageStatsModel::class], version = 1)
+@Database(entities = [Day::class, DayUsageStatsModel::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun statsDao(): StatsDao

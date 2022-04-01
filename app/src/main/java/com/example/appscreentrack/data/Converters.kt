@@ -1,7 +1,7 @@
 package com.example.appscreentrack.data
 
 import androidx.room.TypeConverter
-import com.example.appscreentrack.presentation.main.utils.Utils
+import com.example.appscreentrack.presentation.main.utils.TimeUtils
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.temporal.ChronoUnit
 
@@ -12,6 +12,6 @@ class Converters {
     }
     @TypeConverter
     fun longToDate(millis: Long): ZonedDateTime {
-        return Utils.getZonedDateTime(millis, ChronoUnit.DAYS)
+        return TimeUtils.getZonedDateTime(millis, ChronoUnit.DAYS)
     }
 }

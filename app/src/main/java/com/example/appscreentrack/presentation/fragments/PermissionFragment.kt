@@ -70,7 +70,8 @@ class PermissionFragment : Fragment() {
             else -> appOpsManager.checkOpNoThrow(
                 AppOpsManager.OPSTR_GET_USAGE_STATS,
                 requireContext().applicationInfo.uid,
-                requireContext().applicationInfo.packageName
+                requireContext().applicationInfo.
+                packageName
             )
         }
         return mode == AppOpsManager.MODE_ALLOWED

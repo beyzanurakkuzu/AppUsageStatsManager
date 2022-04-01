@@ -68,7 +68,6 @@ class CalendarAdapter(val callback: ((pos: Int) -> Unit)) :
             this@CalendarAdapter.constraintLayoutHorizontal = constraintLayoutHorizontal
             constraintLayoutHorizontal.setOnClickListener {
                 focusedItem = position
-
                 callback(position)
             }
 
