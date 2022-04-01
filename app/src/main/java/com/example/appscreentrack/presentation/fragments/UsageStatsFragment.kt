@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ViewFlipper
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -29,7 +27,7 @@ import com.github.mikephil.charting.data.PieEntry
 import kotlinx.coroutines.*
 
 class UsageStatsFragment : Fragment() {
-    private val isPremium: Boolean = false
+    private val isPremium: Boolean = true
     private lateinit var binding: FragmentUsageStatsBinding
     private lateinit var horizontalCalendarAdapter: CalendarAdapter
     private val data = getDaysOfMonth()
@@ -86,26 +84,22 @@ class UsageStatsFragment : Fragment() {
             callback = object : SliderLayoutManager.OnItemSelectedListener {
                 override fun onItemSelected(it: Int) {
                     timeStamp = data[it].timeStamp
-                    if (isPremium) {
+                    if (!isPremium) {
                         when (it) {
-                            8,9 -> {
+                            8, 9 -> viewModel.fetchUsageStats(timeStamp)
+                            else -> if (isPremium)
                                 viewModel.fetchUsageStats(timeStamp)
-                                binding.cardPremiumNotification.isGone
-                            }
-                            else -> {
-                                binding.progressBar.isGone
-                                binding.noDataView.visibility=View.INVISIBLE
-                                binding.cardPremiumNotification.visibility=View.VISIBLE
-                            }
+                            else
+                                binding.flipper.switch(binding.cardPremiumNotification)
                         }
                     } else {
                         viewModel.fetchUsageStats(timeStamp)
-                        binding.cardPremiumNotification.isGone
                     }
                     horizontalCalendarAdapter.setFillOutLine(it)
                 }
             }
         }
+
         binding.recyclerViewHorizontalDatePicker.setItemViewCacheSize(21)
         //Setting Adapter
         horizontalCalendarAdapter = CalendarAdapter().apply {
@@ -164,7 +158,6 @@ class UsageStatsFragment : Fragment() {
 
         PieCartUtils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
     }
-
 }
 
 
