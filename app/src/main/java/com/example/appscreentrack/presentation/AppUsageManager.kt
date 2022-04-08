@@ -30,29 +30,24 @@ class AppUsageManager @Inject constructor(
                 today.dayStatsList.forEach {
                     val app = AppModel.fromContext(context, it.packageName)
                     usageList.add(
-                        AppUsageStatsModel(
-                            app,
-                            it.totalTime,
-                            it.lastUsed
-                        )
+                        AppUsageStatsModel(app, it.totalTime, it.lastUsed)
                     )
                 }
             } else if (dayWithStats.size == 2) {
-
                 val today = dayWithStats[0]
                 val yesterday = dayWithStats[1]
 
-                today.dayStatsList.forEach { daystats ->
-                    val app = AppModel.fromContext(context, daystats.packageName)
+                today.dayStatsList.forEach { dayStats ->
+                    val app = AppModel.fromContext(context, dayStats.packageName)
                     val yd = yesterday.dayStatsList.filter { it.packageName == app.packageName }
                         .sumOf { it.totalTime }
-                    val differenceBetweenOneDayAgoTime = daystats.totalTime - yd
-                    println("AppModel: ${app.appName} Day : ${today.day.date}  TodayTime: ${daystats.totalTime} YesterdayTime $yd")
+                    val differenceBetweenOneDayAgoTime = dayStats.totalTime - yd
+                    println("AppModel: ${app.appName} Day : ${today.day.date}  TodayTime: ${dayStats.totalTime} YesterdayTime $yd")
                     usageList.add(
                         AppUsageStatsModel(
                             app,
-                            daystats.totalTime,
-                            daystats.lastUsed,
+                            dayStats.totalTime,
+                            dayStats.lastUsed,
                             yd,
                             differenceBetweenOneDayAgoTime
                         )
@@ -109,7 +104,7 @@ class AppUsageManager @Inject constructor(
                 val pm = context.packageManager
 
                 if (pm.getLaunchIntentForPackage(packageName) != null) {
-                    var startTime=0L
+                    var startTime = 0L
                     var endTime = 0L
                     var totalTime = 0L
                     var lastUsed = 0L
@@ -138,16 +133,14 @@ class AppUsageManager @Inject constructor(
                             }
                         }
 
-                        // If both start and end times exist, add the time to totalTime
-                        // and reset start and end times
+                        // If both start and end times exist, add the time to totalTime and reset start and end times
                         if (startTime != 0L && endTime != 0L) {
                             totalTime += endTime - startTime
                             startTime = 0L; endTime = 0L
                         }
                     }
 
-                    // If the end time was not found, it's likely that the app is still running
-                    // so assume the end time to be now
+                    // If the end time was not found, it's likely that the app is still running so assume the end time to be now
                     if (startTime != 0L && endTime == 0L) {
                         lastUsed = timeEndMillis
                         totalTime += lastUsed - startTime
@@ -169,9 +162,7 @@ class AppUsageManager @Inject constructor(
         }
 
         return DayWithDayStats(
-            Day(
-                date, System.currentTimeMillis()
-            ),
+            Day(date, System.currentTimeMillis()),
             statsList
         )
     }

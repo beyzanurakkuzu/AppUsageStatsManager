@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="single_calendar_margin">10dp</dimen>
-    <dimen name="settings_divider_vertical_margin">5dp</dimen>
     <dimen name="common_margin">6dp</dimen>
-    <dimen name="card_inner_margin">2dp</dimen>
-
-
-
 </resources>

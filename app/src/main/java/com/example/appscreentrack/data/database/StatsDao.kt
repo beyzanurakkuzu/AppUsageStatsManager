@@ -38,10 +38,10 @@ abstract class StatsDao {
     }
 
     @Transaction
-    @Query("SELECT * FROM Day WHERE date IS :date OR date IS :yesterdate ORDER BY date desc")
+    @Query("SELECT * FROM Day WHERE date IS :date OR date IS :yesterday ORDER BY date desc")
     abstract fun getClickedDayWithUsageStats(
         date: ZonedDateTime,
-        yesterdate: ZonedDateTime
+        yesterday: ZonedDateTime
     ): Flow<List<DayWithDayStats>>
 
 }

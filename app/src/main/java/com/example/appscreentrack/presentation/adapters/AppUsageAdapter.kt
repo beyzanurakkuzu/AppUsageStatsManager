@@ -1,7 +1,6 @@
 package com.example.appscreentrack.presentation.adapters
 
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -9,11 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appscreentrack.R
-import com.example.appscreentrack.presentation.main.utils.TimeUtils
 import com.example.appscreentrack.databinding.UsageRowItemBinding
 import com.example.appscreentrack.domain.models.AppUsageStatsModel
+import com.example.appscreentrack.presentation.main.utils.TimeUtils
 
-class AppsUsageAdapter: ListAdapter<AppUsageStatsModel, AppsUsageAdapter.ViewHolder>(UsageDiffUtil()) {
+class AppsUsageAdapter :
+    ListAdapter<AppUsageStatsModel, AppsUsageAdapter.ViewHolder>(UsageDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -27,14 +27,13 @@ class AppsUsageAdapter: ListAdapter<AppUsageStatsModel, AppsUsageAdapter.ViewHol
 
     inner class ViewHolder(var binding: UsageRowItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        @SuppressLint("SetTextI18n")
         fun bind(item: AppUsageStatsModel) {
             //app usage row items
             with(binding) {
-                totalUsageTimeTV.text = TimeUtils.getUsageTimeString(item.totalTime)
-                appIcon.setImageDrawable(item.app.iconDrawable)
-                appNameTv.text = item.app.appName
-                //one day ago -> usageToYesterdayTV= today-yesterday
+                textViewTotalUsageTime.text = TimeUtils.getUsageTimeString(item.totalTime)
+                imageViewAppIcon.setImageDrawable(item.app.iconDrawable)
+                textViewAppName.text = item.app.appName
+                //one day ago -> textViewUsageToYesterday = today - yesterday
                 val dif =
                     if (item.differenceBetweenOneDayAgoTime < 0) (-1L) * item.differenceBetweenOneDayAgoTime
                     else item.differenceBetweenOneDayAgoTime
@@ -42,15 +41,14 @@ class AppsUsageAdapter: ListAdapter<AppUsageStatsModel, AppsUsageAdapter.ViewHol
                 val difference = TimeUtils.getUsageTimeString(dif)
 
                 if (item.oneDayAgoTime != 0L) {
-                    usageToYesterdayTV.text = difference
-                    imageViewRow.isGone = false
+                    textViewUsageToYesterday.text = difference
+                    imageViewIncOrDec.isGone = false
 
-                    if (item.oneDayAgoTime < item.totalTime) imageViewRow.setImageResource(R.drawable.increase)
-                    else imageViewRow.setImageResource(R.drawable.decrease)
-                }
-                else {
-                    usageToYesterdayTV.text = "0"
-                    imageViewRow.isGone = true
+                    if (item.oneDayAgoTime < item.totalTime) imageViewIncOrDec.setImageResource(R.drawable.decrease)
+                    else imageViewIncOrDec.setImageResource(R.drawable.increase)
+                } else {
+                    textViewUsageToYesterday.text = "0"
+                    imageViewIncOrDec.isGone = true
                 }
             }
         }

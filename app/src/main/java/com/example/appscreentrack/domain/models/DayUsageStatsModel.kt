@@ -20,8 +20,8 @@ data class DayUsageStatsModel(
     val packageName: String,
     val totalTime: Long,
     val lastUsed: Long,
-    val timeStamp:Long,
-    val yesterdayData:Long,
+    val timeStamp: Long,
+    val yesterdayData: Long,
     @ColumnInfo(index = true)
     val dayId: ZonedDateTime
 )

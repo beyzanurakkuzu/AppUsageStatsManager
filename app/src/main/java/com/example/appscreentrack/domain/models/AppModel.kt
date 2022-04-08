@@ -10,10 +10,7 @@ data class AppModel(
     var iconDrawable: Drawable?
 ) {
     companion object {
-        fun fromContext(
-            context: Context,
-            packageName: String
-        ): AppModel {
+        fun fromContext(context: Context, packageName: String): AppModel {
             var appIcon: Drawable? = null
             var appName: String
             try {

@@ -22,7 +22,7 @@
             android:padding="10dp">
 
             <ImageView
-                android:id="@+id/appIcon"
+                android:id="@+id/imageViewAppIcon"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
@@ -36,7 +36,7 @@
 
 
             <TextView
-                android:id="@+id/appNameTv"
+                android:id="@+id/textViewAppName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -46,12 +46,12 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/appIcon"
+                app:layout_constraintStart_toEndOf="@+id/imageViewAppIcon"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Netflix" />
 
             <TextView
-                android:id="@+id/usageToYesterdayTV"
+                android:id="@+id/textViewUsageToYesterday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -61,20 +61,20 @@
                 android:textColor="@color/rowTextColorGray"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/totalUsageTimeTV"
-                app:layout_constraintTop_toBottomOf="@+id/totalUsageTimeTV"
+                app:layout_constraintEnd_toEndOf="@+id/textViewTotalUsageTime"
+                app:layout_constraintTop_toBottomOf="@+id/textViewTotalUsageTime"
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="+3 mins 9 sec" />
 
             <TextView
-                android:id="@+id/totalUsageTimeTV"
+                android:id="@+id/textViewTotalUsageTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 android:textAlignment="viewStart"
-               android:textColor="@color/rowTextColorGray"
+                android:textColor="@color/rowTextColorGray"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -82,17 +82,17 @@
                 tools:text="12m 42s" />
 
             <ImageView
-                android:id="@+id/imageViewRow"
+                android:id="@+id/imageViewIncOrDec"
                 android:layout_width="16dp"
                 android:layout_height="13dp"
                 android:layout_marginStart="5dp"
-
                 android:layout_weight="1"
-                app:layout_constraintBottom_toBottomOf="@+id/usageToYesterdayTV"
+                app:layout_constraintBottom_toBottomOf="@+id/textViewUsageToYesterday"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/usageToYesterdayTV"
-                app:srcCompat="@drawable/increase" />
+                app:layout_constraintStart_toEndOf="@+id/textViewUsageToYesterday"
+                app:srcCompat="@drawable/increase"
+                android:contentDescription="@string/decrease_or_increase_image" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

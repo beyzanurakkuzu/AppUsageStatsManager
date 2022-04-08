@@ -75,17 +75,14 @@ class UsageStatsFragment : Fragment() {
     //Get Calendar
     private fun initHorizontalDatePicker() {
         // Setting the padding such that the items will appear in the middle of the screen
-        val padding: Int = ScreenUtils.getScreenWidth(requireActivity()) / 2 - ScreenUtils.dpToPx(
-            requireContext(),
-            40
-        )
-        binding.recyclerViewHorizontalDatePicker.setPadding(padding, 0, padding, 0)
+        setPadding()
+
         val manager: RecyclerView.LayoutManager = SliderLayoutManager(requireContext()).apply {
             callback = object : SliderLayoutManager.OnItemSelectedListener {
-                override fun onItemSelected(it: Int) {
-                    timeStamp = data[it].timeStamp
+                override fun onItemSelected(layoutPosition: Int) {
+                    timeStamp = data[layoutPosition].timeStamp
                     if (!isPremium) {
-                        when (it) {
+                        when (layoutPosition) {
                             8, 9 -> viewModel.fetchUsageStats(timeStamp)
                             else -> if (isPremium)
                                 viewModel.fetchUsageStats(timeStamp)
@@ -95,12 +92,11 @@ class UsageStatsFragment : Fragment() {
                     } else {
                         viewModel.fetchUsageStats(timeStamp)
                     }
-                    horizontalCalendarAdapter.setFillOutLine(it)
+                    horizontalCalendarAdapter.setFillOutLine(layoutPosition)
                 }
             }
         }
 
-        binding.recyclerViewHorizontalDatePicker.setItemViewCacheSize(21)
         //Setting Adapter
         horizontalCalendarAdapter = CalendarAdapter().apply {
             setData(data)
@@ -125,6 +121,14 @@ class UsageStatsFragment : Fragment() {
         }
     }
 
+    private fun setPadding() {
+        val padding: Int = ScreenUtils.getScreenWidth(requireActivity()) / 2 - ScreenUtils.dpToPx(
+            requireContext(),
+            40
+        )
+        binding.recyclerViewHorizontalDatePicker.setPadding(padding, 0, padding, 0)
+    }
+
     //switch with update
     private fun updateView(state: AppState?) {
         when (state) {
@@ -139,7 +143,8 @@ class UsageStatsFragment : Fragment() {
                 }
             }
             is AppState.Error -> binding.flipper.switch(binding.noDataView)
-            else -> { }
+            else -> {
+            }
         }
     }
 
@@ -153,13 +158,13 @@ class UsageStatsFragment : Fragment() {
         for (i in sortedAppNames) {
             pieChartEntry.add(PieEntry(i.value, i.key))
         }
+
         val pieDataSet = PieDataSet(pieChartEntry, "")
         val pieData = PieData(pieDataSet)
 
         PieCartUtils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
     }
 }
-
 
 fun ViewFlipper.switch(v: View) {
     while (currentView != v)
