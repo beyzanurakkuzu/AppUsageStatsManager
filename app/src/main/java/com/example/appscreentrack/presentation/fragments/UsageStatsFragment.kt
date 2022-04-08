@@ -19,7 +19,7 @@ import com.example.appscreentrack.presentation.main.AppState
 import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
 import com.example.appscreentrack.presentation.main.utils.ScreenUtils
 import com.example.appscreentrack.domain.viewmodel.UsageStatsViewModel
-import com.example.appscreentrack.presentation.main.calendar.SliderLayoutManager
+import com.example.appscreentrack.presentation.main.calendar.CalendarLayoutManager
 import com.example.appscreentrack.presentation.main.utils.PieCartUtils
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
@@ -80,8 +80,8 @@ class UsageStatsFragment : Fragment() {
             40
         )
         binding.recyclerViewHorizontalDatePicker.setPadding(padding, 0, padding, 0)
-        val manager: RecyclerView.LayoutManager = SliderLayoutManager(requireContext()).apply {
-            callback = object : SliderLayoutManager.OnItemSelectedListener {
+        val manager: RecyclerView.LayoutManager = CalendarLayoutManager(requireContext()).apply {
+            callback = object : CalendarLayoutManager.OnItemSelectedListener {
                 override fun onItemSelected(it: Int) {
                     timeStamp = data[it].timeStamp
                     if (!isPremium) {
@@ -99,8 +99,6 @@ class UsageStatsFragment : Fragment() {
                 }
             }
         }
-
-        binding.recyclerViewHorizontalDatePicker.setItemViewCacheSize(21)
         //Setting Adapter
         horizontalCalendarAdapter = CalendarAdapter().apply {
             setData(data)

@@ -21,7 +21,7 @@ class CalendarAdapter() :
     lateinit var whiteOutLineDrawable: Drawable
     lateinit var fillOutLineDrawable: Drawable
     lateinit var blueOutLineDrawable: Drawable
-
+    private val isPremium: Boolean = true
     companion object {
         var focusedItem: Int? = 9
     }
@@ -112,9 +112,13 @@ class CalendarAdapter() :
         fun onItemClicked(position: Int)
     }
     private fun premiumVisibilityControl(mPosition: Int, icPremium: ImageView) {
-        when (mPosition) {
-            8, 9 -> icPremium.visibility = View.INVISIBLE
-            else -> icPremium.visibility = View.VISIBLE
+        if (!isPremium) {
+            when (mPosition) {
+                8, 9 -> icPremium.visibility = View.INVISIBLE
+                else -> icPremium.visibility = View.VISIBLE
+            }
+        } else {
+            icPremium.visibility = View.INVISIBLE
         }
     }
 }
