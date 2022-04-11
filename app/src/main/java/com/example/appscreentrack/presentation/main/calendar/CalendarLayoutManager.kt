@@ -5,10 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 
-class CalendarLayoutManager(context: Context?) : LinearLayoutManager(context) {
+class CalenderLayoutManager(context: Context?) : LinearLayoutManager(context) {
 
     init {
-        orientation = HORIZONTAL;
+        orientation = HORIZONTAL
     }
 
     var callback: OnItemSelectedListener? = null
@@ -27,20 +27,18 @@ class CalendarLayoutManager(context: Context?) : LinearLayoutManager(context) {
     }
 
     override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler?, state: RecyclerView.State?): Int {
-        if (orientation == HORIZONTAL) {
+        return if (orientation == HORIZONTAL) {
             val scrolled = super.scrollHorizontallyBy(dx, recycler, state)
-            return scrolled
+            scrolled
         } else {
-            return 0
+            0
         }
     }
-
-
 
     override fun onScrollStateChanged(state: Int) {
         super.onScrollStateChanged(state)
         // When scroll stops we notify on the selected item
-        if (state.equals(RecyclerView.SCROLL_STATE_IDLE)) {
+        if (state == RecyclerView.SCROLL_STATE_IDLE) {
 
             // Find the closest child to the recyclerView center --> this is the selected item.
             val recyclerViewCenterX = getRecyclerViewCenterX()
@@ -48,8 +46,9 @@ class CalendarLayoutManager(context: Context?) : LinearLayoutManager(context) {
             var position = -1
             for (i in 0 until recyclerView.childCount) {
                 val child = recyclerView.getChildAt(i)
-                val childCenterX = getDecoratedLeft(child) + (getDecoratedRight(child) - getDecoratedLeft(child)) / 2
-                var newDistance = Math.abs(childCenterX - recyclerViewCenterX)
+                val childCenterX =
+                    getDecoratedLeft(child) + (getDecoratedRight(child) - getDecoratedLeft(child)) / 2
+                val newDistance = kotlin.math.abs(childCenterX - recyclerViewCenterX)
                 if (newDistance < minDistance) {
                     minDistance = newDistance
                     position = recyclerView.getChildLayoutPosition(child)
@@ -61,8 +60,8 @@ class CalendarLayoutManager(context: Context?) : LinearLayoutManager(context) {
         }
     }
 
-    private fun getRecyclerViewCenterX() : Int {
-        return (recyclerView.right - recyclerView.left)/2 + recyclerView.left
+    private fun getRecyclerViewCenterX(): Int {
+        return (recyclerView.right - recyclerView.left) / 2 + recyclerView.left
     }
 
     interface OnItemSelectedListener {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E5E5E5"
+    android:background="@color/main_background"
     android:orientation="vertical"
     tools:context=".presentation.fragments.UsageStatsFragment">
 
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:translationZ="0.1dp"
-        app:CustomToolbar_title="Kullanım İstatistikleri "
+        app:CustomToolbar_title="@string/kullanim_istatistikleri"
         app:CustomToolbar_title_color="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -97,8 +97,7 @@
         </LinearLayout>
         <!--CONTENT-->
 
-
-        <!--PREMIUMCARD-->
+        <!--PREMIUM CARD-->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardPremiumNotification"
             android:layout_width="match_parent"
@@ -156,7 +155,7 @@
                     android:layout_alignEnd="@+id/premiumText1"
                     android:layout_marginTop="36dp"
                     android:backgroundTint="@color/main_secondary2_100"
-                    android:text="GO PREMIUM"
+                    android:text="@string/go_premium"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     app:cornerRadius="8dp" />
@@ -164,7 +163,7 @@
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>
-        <!--PREMIUMCARD-->
+        <!--PREMIUM CARD-->
 
         <!--EMPTY-->
         <RelativeLayout

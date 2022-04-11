@@ -10,7 +10,7 @@ object DateUtils {
     fun getDaysOfMonth(): ArrayList<CalendarDateModel> {
         horizontalDateList.clear()
         val cal = Calendar.getInstance(TimeZone.getDefault())
-        val maxDay: Int = 9
+        val maxDay = 9
         var currentDay = cal.get(Calendar.DAY_OF_MONTH)
         val df = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         val cd = SimpleDateFormat("EE", Locale.getDefault())
@@ -37,7 +37,6 @@ object DateUtils {
     }
 
     private fun findNightTime(milis: Long): Long {
-
         return getEndDateOfDay(milis)
     }
 
@@ -48,7 +47,6 @@ object DateUtils {
         cal.set(Calendar.SECOND, 0)
         cal.set(Calendar.MINUTE, 0)
         cal.set(Calendar.HOUR_OF_DAY, 0)
-        println(cal.timeInMillis)
         return cal.timeInMillis
     }
 }

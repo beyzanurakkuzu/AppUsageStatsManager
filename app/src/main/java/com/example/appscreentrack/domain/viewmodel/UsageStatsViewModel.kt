@@ -47,11 +47,3 @@ class UsageStatsViewModel @Inject constructor(
         }
     }
 }
-
-
-
-
-
-
-
-

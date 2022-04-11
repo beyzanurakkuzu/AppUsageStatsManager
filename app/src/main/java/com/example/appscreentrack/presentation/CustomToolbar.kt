@@ -13,7 +13,7 @@ import com.google.android.material.appbar.AppBarLayout
 class CustomToolbar @JvmOverloads constructor(
     context: Context, attributeSet: AttributeSet? = null
 ) : ConstraintLayout(context, attributeSet) {
-    private lateinit var imgBack: ImageView
+    private lateinit var imageBack: ImageView
     private lateinit var title: TextView
 
     init {
@@ -24,7 +24,7 @@ class CustomToolbar @JvmOverloads constructor(
             val string =
                 obtainStyledAttributes.getString(R.styleable.CustomToolbar_CustomToolbar_title)
 
-            imgBack = findViewById(R.id.imageViewBack)
+            imageBack = findViewById(R.id.imageViewBack)
             title = findViewById(R.id.textViewToolbarTitle)
 
             if (string != null) {
@@ -44,7 +44,7 @@ class CustomToolbar @JvmOverloads constructor(
             (findViewById<TextView>(R.id.textViewToolbarTitle)).setTextColor(titleColor)
             (findViewById<ImageView>(R.id.imageViewBack)).setColorFilter(titleColor)
 
-            imgBack = findViewById(R.id.imageViewBack)
+            imageBack = findViewById(R.id.imageViewBack)
             obtainStyledAttributes.recycle()
         }
         isClickable = true
@@ -52,6 +52,6 @@ class CustomToolbar @JvmOverloads constructor(
     }
 
     fun imgBackButtonClick(listener: OnClickListener) {
-        imgBack.setOnClickListener(listener)
+        imageBack.setOnClickListener(listener)
     }
 }

@@ -13,7 +13,7 @@ import com.example.appscreentrack.R
 import com.example.appscreentrack.databinding.DateItemBinding
 import kotlin.collections.ArrayList
 
-class CalendarAdapter() :
+class CalendarAdapter :
     RecyclerView.Adapter<CalendarItemViewHolder>() {
     private val data: ArrayList<CalendarDateModel> = ArrayList();
     lateinit var constraintLayoutHorizontal: ConstraintLayout
@@ -21,7 +21,7 @@ class CalendarAdapter() :
     lateinit var whiteOutLineDrawable: Drawable
     lateinit var fillOutLineDrawable: Drawable
     lateinit var blueOutLineDrawable: Drawable
-    private val isPremium: Boolean = true
+
     companion object {
         var focusedItem: Int? = 9
     }
@@ -66,10 +66,11 @@ class CalendarAdapter() :
                 position,
                 sliderImageViewPremium
             )
+
             this@CalendarAdapter.constraintLayoutHorizontal = constraintLayoutHorizontal
+
             constraintLayoutHorizontal.setOnClickListener {
                 focusedItem = position
-
                 callback?.onItemClicked(position)
             }
 
@@ -108,17 +109,15 @@ class CalendarAdapter() :
         this.data.addAll(data)
         notifyDataSetChanged()
     }
+
     interface Callback {
         fun onItemClicked(position: Int)
     }
+
     private fun premiumVisibilityControl(mPosition: Int, icPremium: ImageView) {
-        if (!isPremium) {
-            when (mPosition) {
-                8, 9 -> icPremium.visibility = View.INVISIBLE
-                else -> icPremium.visibility = View.VISIBLE
-            }
-        } else {
-            icPremium.visibility = View.INVISIBLE
+        when (mPosition) {
+            8, 9 -> icPremium.visibility = View.INVISIBLE
+            else -> icPremium.visibility = View.VISIBLE
         }
     }
 }

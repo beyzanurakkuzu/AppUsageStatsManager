@@ -12,18 +12,15 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appscreentrack.R
-import com.example.appscreentrack.presentation.adapters.AppsUsageAdapter
-import com.example.appscreentrack.presentation.main.calendar.CalendarAdapter
 import com.example.appscreentrack.databinding.FragmentUsageStatsBinding
-import com.example.appscreentrack.presentation.main.AppState
-import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
-import com.example.appscreentrack.presentation.main.utils.ScreenUtils
 import com.example.appscreentrack.domain.viewmodel.UsageStatsViewModel
-import com.example.appscreentrack.presentation.main.calendar.CalendarLayoutManager
+import com.example.appscreentrack.presentation.adapters.AppsUsageAdapter
+import com.example.appscreentrack.presentation.main.AppState
+import com.example.appscreentrack.presentation.main.calendar.CalendarAdapter
+import com.example.appscreentrack.presentation.main.calendar.CalenderLayoutManager
+import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
 import com.example.appscreentrack.presentation.main.utils.PieCartUtils
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.example.appscreentrack.presentation.main.utils.ScreenUtils
 import kotlinx.coroutines.*
 
 class UsageStatsFragment : Fragment() {
@@ -52,11 +49,14 @@ class UsageStatsFragment : Fragment() {
         setupViewModelObservers()
         initHorizontalDatePicker()
         binding.imageViewActivePin.setImageDrawable(requireActivity().getDrawable(R.drawable.shape_app_tab_indicator))
+        navigateBack()
+        setAdapter()
+    }
+
+    private fun navigateBack() {
         binding.backAppBar.imgBackButtonClick {
             Navigation.findNavController(requireView()).popBackStack()
         }
-
-        setAdapter()
     }
 
     private fun setAdapter() {
@@ -75,30 +75,30 @@ class UsageStatsFragment : Fragment() {
     //Get Calendar
     private fun initHorizontalDatePicker() {
         // Setting the padding such that the items will appear in the middle of the screen
-        val padding: Int = ScreenUtils.getScreenWidth(requireActivity()) / 2 - ScreenUtils.dpToPx(
+        ScreenUtils.setPadding(
+            requireActivity(),
             requireContext(),
-            40
+            binding.recyclerViewHorizontalDatePicker
         )
-        binding.recyclerViewHorizontalDatePicker.setPadding(padding, 0, padding, 0)
-        val manager: RecyclerView.LayoutManager = CalendarLayoutManager(requireContext()).apply {
-            callback = object : CalendarLayoutManager.OnItemSelectedListener {
-                override fun onItemSelected(it: Int) {
-                    timeStamp = data[it].timeStamp
+
+        val manager: RecyclerView.LayoutManager = CalenderLayoutManager(requireContext()).apply {
+            callback = object : CalenderLayoutManager.OnItemSelectedListener {
+                override fun onItemSelected(layoutPosition: Int) {
+                    timeStamp = data[layoutPosition].timeStamp
                     if (!isPremium) {
-                        when (it) {
+                        when (layoutPosition) {
                             8, 9 -> viewModel.fetchUsageStats(timeStamp)
-                            else -> if (isPremium)
-                                viewModel.fetchUsageStats(timeStamp)
-                            else
+                            else ->
                                 binding.flipper.switch(binding.cardPremiumNotification)
                         }
                     } else {
                         viewModel.fetchUsageStats(timeStamp)
                     }
-                    horizontalCalendarAdapter.setFillOutLine(it)
+                    horizontalCalendarAdapter.setFillOutLine(layoutPosition)
                 }
             }
         }
+
         //Setting Adapter
         horizontalCalendarAdapter = CalendarAdapter().apply {
             setData(data)
@@ -132,32 +132,16 @@ class UsageStatsFragment : Fragment() {
                     binding.flipper.switch(binding.noDataView)
                 else {
                     usageAdapter.submitList(state.usageList)
-                    setPieChart(state.map)
+                    PieCartUtils.setPieChart(state.map, binding.pieChart, requireContext())
                     binding.flipper.switch(binding.content)
                 }
             }
             is AppState.Error -> binding.flipper.switch(binding.noDataView)
-            else -> { }
+            else -> {
+            }
         }
-    }
-
-    //Pie Chart
-    private fun setPieChart(appNames: HashMap<String, Float>) {
-        val pieChart = binding.pieChart
-        val pieChartEntry = ArrayList<PieEntry>()
-        val sortedAppNames =
-            appNames.toList().sortedBy { (_, v) -> v }.toMap()
-
-        for (i in sortedAppNames) {
-            pieChartEntry.add(PieEntry(i.value, i.key))
-        }
-        val pieDataSet = PieDataSet(pieChartEntry, "")
-        val pieData = PieData(pieDataSet)
-
-        PieCartUtils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
     }
 }
-
 
 fun ViewFlipper.switch(v: View) {
     while (currentView != v)

@@ -7,6 +7,7 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 
 object PieCartUtils {
     private fun addColors(context: Context): ArrayList<Int> {
@@ -19,7 +20,23 @@ object PieCartUtils {
         return colors
     }
 
-    fun setPropertiesAndLegends(
+    //Pie Chart
+    fun setPieChart(appNames: HashMap<String, Float>, pieChart: PieChart, context: Context) {
+        val pieChartEntry = ArrayList<PieEntry>()
+        val sortedAppNames =
+            appNames.toList().sortedBy { (_, v) -> v }.toMap()
+
+        for (i in sortedAppNames) {
+            pieChartEntry.add(PieEntry(i.value, i.key))
+        }
+
+        val pieDataSet = PieDataSet(pieChartEntry, "")
+        val pieData = PieData(pieDataSet)
+
+        setPropertiesAndLegends(pieDataSet, pieChart, pieData, context)
+    }
+
+    private fun setPropertiesAndLegends(
         pieDataSet: PieDataSet,
         pieChart: PieChart,
         pieData: PieData,

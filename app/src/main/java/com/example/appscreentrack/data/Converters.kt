@@ -10,6 +10,7 @@ class Converters {
     fun fromDate(date: ZonedDateTime): Long {
         return date.truncatedTo(ChronoUnit.DAYS).toInstant().toEpochMilli()
     }
+
     @TypeConverter
     fun longToDate(millis: Long): ZonedDateTime {
         return TimeUtils.getZonedDateTime(millis, ChronoUnit.DAYS)

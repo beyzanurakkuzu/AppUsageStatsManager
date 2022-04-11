@@ -7,6 +7,6 @@ sealed class AppState {
     object Error : AppState()
     data class Content(
         val usageList: List<AppUsageStatsModel>,
-        val map : HashMap<String, Float>
+        val map: HashMap<String, Float>
     ) : AppState()
 }
