@@ -66,10 +66,11 @@ class CalendarAdapter() :
                 position,
                 sliderImageViewPremium
             )
+
             this@CalendarAdapter.constraintLayoutHorizontal = constraintLayoutHorizontal
+
             constraintLayoutHorizontal.setOnClickListener {
                 focusedItem = position
-
                 callback?.onItemClicked(position)
             }
 
@@ -108,9 +109,11 @@ class CalendarAdapter() :
         this.data.addAll(data)
         notifyDataSetChanged()
     }
+
     interface Callback {
         fun onItemClicked(position: Int)
     }
+
     private fun premiumVisibilityControl(mPosition: Int, icPremium: ImageView) {
         when (mPosition) {
             8, 9 -> icPremium.visibility = View.INVISIBLE

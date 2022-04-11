@@ -2,6 +2,7 @@ package com.example.appscreentrack.presentation.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,18 +13,15 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appscreentrack.R
-import com.example.appscreentrack.presentation.adapters.AppsUsageAdapter
-import com.example.appscreentrack.presentation.main.calendar.CalendarAdapter
 import com.example.appscreentrack.databinding.FragmentUsageStatsBinding
-import com.example.appscreentrack.presentation.main.AppState
-import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
-import com.example.appscreentrack.presentation.main.utils.ScreenUtils
 import com.example.appscreentrack.domain.viewmodel.UsageStatsViewModel
+import com.example.appscreentrack.presentation.adapters.AppsUsageAdapter
+import com.example.appscreentrack.presentation.main.AppState
+import com.example.appscreentrack.presentation.main.calendar.CalendarAdapter
 import com.example.appscreentrack.presentation.main.calendar.SliderLayoutManager
+import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
 import com.example.appscreentrack.presentation.main.utils.PieCartUtils
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.example.appscreentrack.presentation.main.utils.ScreenUtils
 import kotlinx.coroutines.*
 
 class UsageStatsFragment : Fragment() {
@@ -52,11 +50,14 @@ class UsageStatsFragment : Fragment() {
         setupViewModelObservers()
         initHorizontalDatePicker()
         binding.imageViewActivePin.setImageDrawable(requireActivity().getDrawable(R.drawable.shape_app_tab_indicator))
+        navigateBack()
+        setAdapter()
+    }
+
+    private fun navigateBack() {
         binding.backAppBar.imgBackButtonClick {
             Navigation.findNavController(requireView()).popBackStack()
         }
-
-        setAdapter()
     }
 
     private fun setAdapter() {
@@ -75,7 +76,11 @@ class UsageStatsFragment : Fragment() {
     //Get Calendar
     private fun initHorizontalDatePicker() {
         // Setting the padding such that the items will appear in the middle of the screen
-        setPadding()
+        ScreenUtils.setPadding(
+            requireActivity(),
+            requireContext(),
+            binding.recyclerViewHorizontalDatePicker
+        )
 
         val manager: RecyclerView.LayoutManager = SliderLayoutManager(requireContext()).apply {
             callback = object : SliderLayoutManager.OnItemSelectedListener {
@@ -84,9 +89,7 @@ class UsageStatsFragment : Fragment() {
                     if (!isPremium) {
                         when (layoutPosition) {
                             8, 9 -> viewModel.fetchUsageStats(timeStamp)
-                            else -> if (isPremium)
-                                viewModel.fetchUsageStats(timeStamp)
-                            else
+                            else ->
                                 binding.flipper.switch(binding.cardPremiumNotification)
                         }
                     } else {
@@ -121,14 +124,6 @@ class UsageStatsFragment : Fragment() {
         }
     }
 
-    private fun setPadding() {
-        val padding: Int = ScreenUtils.getScreenWidth(requireActivity()) / 2 - ScreenUtils.dpToPx(
-            requireContext(),
-            40
-        )
-        binding.recyclerViewHorizontalDatePicker.setPadding(padding, 0, padding, 0)
-    }
-
     //switch with update
     private fun updateView(state: AppState?) {
         when (state) {
@@ -138,7 +133,7 @@ class UsageStatsFragment : Fragment() {
                     binding.flipper.switch(binding.noDataView)
                 else {
                     usageAdapter.submitList(state.usageList)
-                    setPieChart(state.map)
+                    PieCartUtils.setPieChart(state.map, binding.pieChart, requireContext())
                     binding.flipper.switch(binding.content)
                 }
             }
@@ -146,23 +141,6 @@ class UsageStatsFragment : Fragment() {
             else -> {
             }
         }
-    }
-
-    //Pie Chart
-    private fun setPieChart(appNames: HashMap<String, Float>) {
-        val pieChart = binding.pieChart
-        val pieChartEntry = ArrayList<PieEntry>()
-        val sortedAppNames =
-            appNames.toList().sortedBy { (_, v) -> v }.toMap()
-
-        for (i in sortedAppNames) {
-            pieChartEntry.add(PieEntry(i.value, i.key))
-        }
-
-        val pieDataSet = PieDataSet(pieChartEntry, "")
-        val pieData = PieData(pieDataSet)
-
-        PieCartUtils.setPropertiesAndLegends(pieDataSet, pieChart, pieData, requireContext())
     }
 }
 
