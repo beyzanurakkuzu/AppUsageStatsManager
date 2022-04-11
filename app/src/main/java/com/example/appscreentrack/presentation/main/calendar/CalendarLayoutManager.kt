@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 class CalenderLayoutManager(context: Context?) : LinearLayoutManager(context) {
 
     init {
-        orientation = HORIZONTAL;
+        orientation = HORIZONTAL
     }
 
     var callback: OnItemSelectedListener? = null
@@ -26,11 +26,7 @@ class CalenderLayoutManager(context: Context?) : LinearLayoutManager(context) {
         super.onLayoutChildren(recycler, state)
     }
 
-    override fun scrollHorizontallyBy(
-        dx: Int,
-        recycler: RecyclerView.Recycler?,
-        state: RecyclerView.State?
-    ): Int {
+    override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler?, state: RecyclerView.State?): Int {
         return if (orientation == HORIZONTAL) {
             val scrolled = super.scrollHorizontallyBy(dx, recycler, state)
             scrolled

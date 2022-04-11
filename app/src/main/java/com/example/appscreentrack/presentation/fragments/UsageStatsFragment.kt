@@ -2,7 +2,6 @@ package com.example.appscreentrack.presentation.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,7 @@ import com.example.appscreentrack.domain.viewmodel.UsageStatsViewModel
 import com.example.appscreentrack.presentation.adapters.AppsUsageAdapter
 import com.example.appscreentrack.presentation.main.AppState
 import com.example.appscreentrack.presentation.main.calendar.CalendarAdapter
-import com.example.appscreentrack.presentation.main.calendar.SliderLayoutManager
+import com.example.appscreentrack.presentation.main.calendar.CalenderLayoutManager
 import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
 import com.example.appscreentrack.presentation.main.utils.PieCartUtils
 import com.example.appscreentrack.presentation.main.utils.ScreenUtils
@@ -82,8 +81,8 @@ class UsageStatsFragment : Fragment() {
             binding.recyclerViewHorizontalDatePicker
         )
 
-        val manager: RecyclerView.LayoutManager = SliderLayoutManager(requireContext()).apply {
-            callback = object : SliderLayoutManager.OnItemSelectedListener {
+        val manager: RecyclerView.LayoutManager = CalenderLayoutManager(requireContext()).apply {
+            callback = object : CalenderLayoutManager.OnItemSelectedListener {
                 override fun onItemSelected(layoutPosition: Int) {
                     timeStamp = data[layoutPosition].timeStamp
                     if (!isPremium) {
