@@ -1,6 +1,6 @@
 package com.example.appscreentrack.presentation.main.calendar
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -11,16 +11,14 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appscreentrack.R
 import com.example.appscreentrack.databinding.DateItemBinding
-import kotlin.collections.ArrayList
 
-class CalendarAdapter :
+class CalendarAdapter(val context: Context) :
     RecyclerView.Adapter<CalendarItemViewHolder>() {
     private val data: ArrayList<CalendarDateModel> = ArrayList();
     lateinit var constraintLayoutHorizontal: ConstraintLayout
     var callback: Callback? = null
-    lateinit var whiteOutLineDrawable: Drawable
-    lateinit var fillOutLineDrawable: Drawable
-    lateinit var blueOutLineDrawable: Drawable
+    private lateinit var whiteOutLineDrawable: Drawable
+    private lateinit var fillOutLineDrawable: Drawable
 
     companion object {
         var focusedItem: Int? = 9
@@ -32,7 +30,6 @@ class CalendarAdapter :
         notifyDataSetChanged()
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarItemViewHolder {
         val binding = CalendarItemViewHolder(
             DateItemBinding.inflate(
@@ -40,13 +37,12 @@ class CalendarAdapter :
                 parent, false
             )
         )
+
         constraintLayoutHorizontal = binding.constraintLayoutHorizontal
         whiteOutLineDrawable =
-            binding.itemView.context.getDrawable(R.drawable.horizontalpicker_outline_white)!!
+            ContextCompat.getDrawable(context, R.drawable.horizontalpicker_outline_white)!!
         fillOutLineDrawable =
-            binding.itemView.context.getDrawable(R.drawable.horizontalpicker_outline_empty)!!
-        blueOutLineDrawable =
-            binding.itemView.context.getDrawable(R.drawable.horizontalpicker_outline_blue)!!
+            ContextCompat.getDrawable(context, R.drawable.horizontalpicker_outline_empty)!!
         return binding
     }
 
@@ -114,8 +110,8 @@ class CalendarAdapter :
         fun onItemClicked(position: Int)
     }
 
-    private fun premiumVisibilityControl(mPosition: Int, icPremium: ImageView) {
-        when (mPosition) {
+    private fun premiumVisibilityControl(position: Int, icPremium: ImageView) {
+        when (position) {
             8, 9 -> icPremium.visibility = View.INVISIBLE
             else -> icPremium.visibility = View.VISIBLE
         }

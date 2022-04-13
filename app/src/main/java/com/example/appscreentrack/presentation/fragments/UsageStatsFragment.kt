@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ViewFlipper
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
@@ -42,13 +43,12 @@ class UsageStatsFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = binding.root
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupViewModelObservers()
         initHorizontalDatePicker()
-        binding.imageViewActivePin.setImageDrawable(requireActivity().getDrawable(R.drawable.shape_app_tab_indicator))
+        binding.imageViewActivePin.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.shape_app_tab_indicator))
         navigateBack()
         setAdapter()
     }
@@ -56,13 +56,6 @@ class UsageStatsFragment : Fragment() {
     private fun navigateBack() {
         binding.backAppBar.imgBackButtonClick {
             Navigation.findNavController(requireView()).popBackStack()
-        }
-    }
-
-    private fun setAdapter() {
-        binding.recyclerViewUsageList.apply {
-            adapter = usageAdapter
-            layoutManager = LinearLayoutManager(context)
         }
     }
 
@@ -100,7 +93,7 @@ class UsageStatsFragment : Fragment() {
         }
 
         //Setting Adapter
-        horizontalCalendarAdapter = CalendarAdapter().apply {
+        horizontalCalendarAdapter = CalendarAdapter(requireContext()).apply {
             setData(data)
             callback = object : CalendarAdapter.Callback {
                 override fun onItemClicked(position: Int) {
@@ -117,9 +110,20 @@ class UsageStatsFragment : Fragment() {
             }
         }
 
+        setHorizontalDatePicker(manager)
+    }
+
+    private fun setHorizontalDatePicker(manager: RecyclerView.LayoutManager) {
         binding.recyclerViewHorizontalDatePicker.apply {
             adapter = horizontalCalendarAdapter
             layoutManager = manager
+        }
+    }
+
+    private fun setAdapter() {
+        binding.recyclerViewUsageList.apply {
+            adapter = usageAdapter
+            layoutManager = LinearLayoutManager(context)
         }
     }
 
