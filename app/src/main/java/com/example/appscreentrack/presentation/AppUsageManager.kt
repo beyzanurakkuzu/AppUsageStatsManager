@@ -37,16 +37,17 @@ class AppUsageManager @Inject constructor(@ApplicationContext private val contex
 
                 today.dayStatsList.forEach { dayStats ->
                     val app = AppModel.fromContext(context, dayStats.packageName)
-                    val yd = yesterday.dayStatsList.filter { it.packageName == app.packageName }
-                        .sumOf { it.totalTime }
-                    val differenceBetweenOneDayAgoTime = dayStats.totalTime - yd
-                    println("AppModel: ${app.appName} Day : ${today.day.date}  TodayTime: ${dayStats.totalTime} YesterdayTime $yd")
+                    val oneDayAgoTime =
+                        yesterday.dayStatsList.filter { it.packageName == app.packageName }
+                            .sumOf { it.totalTime }
+                    val differenceBetweenOneDayAgoTime = dayStats.totalTime - oneDayAgoTime
+
                     usageList.add(
                         AppUsageStatsModel(
                             app,
                             dayStats.totalTime,
                             dayStats.lastUsed,
-                            yd,
+                            oneDayAgoTime,
                             differenceBetweenOneDayAgoTime
                         )
                     )

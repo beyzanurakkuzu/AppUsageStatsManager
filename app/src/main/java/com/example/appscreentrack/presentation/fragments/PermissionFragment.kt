@@ -35,7 +35,7 @@ class PermissionFragment : Fragment() {
     }
 
     private fun showDialogOrProceed() {
-        if(!hasUsageAccessPermission())
+        if (!hasUsageAccessPermission())
             showUsageAccessPermissionDialog()
         else {
             findNavController().navigate(R.id.action_permissionFragment_to_homeFragment)
@@ -45,8 +45,9 @@ class PermissionFragment : Fragment() {
     private fun showUsageAccessPermissionDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("Permission")
-            .setMessage("In order to use the app, " +
-                    "please grant the AppModel Usage Access permission in settings")
+            .setMessage(
+                "In order to use the app, please grant the usage access permission in settings."
+            )
             .setNegativeButton("No") { _, _ ->
                 activity?.finish()
             }
@@ -55,6 +56,7 @@ class PermissionFragment : Fragment() {
             }
             .create().show()
     }
+
     private fun hasUsageAccessPermission(): Boolean {
         val appOpsManager = context?.getSystemService(
             Context.APP_OPS_SERVICE
@@ -69,15 +71,15 @@ class PermissionFragment : Fragment() {
             else -> appOpsManager.checkOpNoThrow(
                 AppOpsManager.OPSTR_GET_USAGE_STATS,
                 requireContext().applicationInfo.uid,
-                requireContext().applicationInfo.
-                packageName
+                requireContext().applicationInfo.packageName
             )
         }
         return mode == AppOpsManager.MODE_ALLOWED
     }
+
     private fun openSettings() {
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-        if(intent.resolveActivity(requireActivity().packageManager) != null) {
+        if (intent.resolveActivity(requireActivity().packageManager) != null) {
             startActivity(intent)
         }
     }

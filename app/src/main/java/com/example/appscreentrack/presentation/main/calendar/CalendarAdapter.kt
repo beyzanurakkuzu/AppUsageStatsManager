@@ -63,8 +63,6 @@ class CalendarAdapter(val context: Context) :
                 sliderImageViewPremium
             )
 
-            this@CalendarAdapter.constraintLayoutHorizontal = constraintLayoutHorizontal
-
             constraintLayoutHorizontal.setOnClickListener {
                 focusedItem = position
                 callback?.onItemClicked(position)
