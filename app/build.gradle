@@ -3,8 +3,6 @@ plugins {
     id 'kotlin-android'
 }
 apply plugin: "androidx.navigation.safeargs.kotlin"
-
-
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
@@ -39,7 +37,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
@@ -65,11 +62,11 @@ dependencies {
     kapt "androidx.room:room-compiler:2.4.1"
     implementation("androidx.room:room-runtime:2.4.1")
     annotationProcessor("androidx.room:room-compiler:2.4.1")
+
     // ThreeTenABP
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.4'
 
     // PieChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation "androidx.window:window:1.0.0-beta02"
-
 }

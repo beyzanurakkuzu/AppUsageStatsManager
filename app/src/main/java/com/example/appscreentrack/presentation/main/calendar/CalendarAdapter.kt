@@ -16,7 +16,7 @@ class CalendarAdapter(val context: Context) :
     RecyclerView.Adapter<CalendarItemViewHolder>() {
     private val data: ArrayList<CalendarDateModel> = ArrayList();
     lateinit var constraintLayoutHorizontal: ConstraintLayout
-    var callback: Callback? = null
+    var callback: ClickListener? = null
     private lateinit var whiteOutLineDrawable: Drawable
     private lateinit var fillOutLineDrawable: Drawable
 
@@ -102,10 +102,6 @@ class CalendarAdapter(val context: Context) :
         this.data.clear()
         this.data.addAll(data)
         notifyDataSetChanged()
-    }
-
-    interface Callback {
-        fun onItemClicked(position: Int)
     }
 
     private fun premiumVisibilityControl(position: Int, icPremium: ImageView) {

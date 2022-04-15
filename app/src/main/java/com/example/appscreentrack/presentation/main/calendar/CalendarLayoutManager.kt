@@ -11,7 +11,7 @@ class CalenderLayoutManager(context: Context?) : LinearLayoutManager(context) {
         orientation = HORIZONTAL
     }
 
-    var callback: OnItemSelectedListener? = null
+    var callback: ClickListener? = null
     private lateinit var recyclerView: RecyclerView
 
     override fun onAttachedToWindow(view: RecyclerView?) {
@@ -56,15 +56,11 @@ class CalenderLayoutManager(context: Context?) : LinearLayoutManager(context) {
             }
 
             // Notify on item selection
-            callback?.onItemSelected(position)
+            callback?.onItemClicked(position)
         }
     }
 
     private fun getRecyclerViewCenterX(): Int {
         return (recyclerView.right - recyclerView.left) / 2 + recyclerView.left
-    }
-
-    interface OnItemSelectedListener {
-        fun onItemSelected(layoutPosition: Int)
     }
 }

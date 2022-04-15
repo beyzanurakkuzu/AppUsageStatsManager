@@ -1,6 +1,7 @@
 package com.example.appscreentrack.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.example.appscreentrack.presentation.adapters.AppsUsageAdapter
 import com.example.appscreentrack.presentation.main.AppState
 import com.example.appscreentrack.presentation.main.calendar.CalendarAdapter
 import com.example.appscreentrack.presentation.main.calendar.CalenderLayoutManager
+import com.example.appscreentrack.presentation.main.calendar.ClickListener
 import com.example.appscreentrack.presentation.main.utils.DateUtils.getDaysOfMonth
 import com.example.appscreentrack.presentation.main.utils.PieCartUtils
 import com.example.appscreentrack.presentation.main.utils.ScreenUtils
@@ -47,7 +49,12 @@ class UsageStatsFragment : Fragment() {
 
         setupViewModelObservers()
         initHorizontalDatePicker()
-        binding.imageViewActivePin.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.shape_app_tab_indicator))
+        binding.imageViewActivePin.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.shape_app_tab_indicator
+            )
+        )
         navigateBack()
         setAdapter()
     }
@@ -73,43 +80,44 @@ class UsageStatsFragment : Fragment() {
             binding.recyclerViewHorizontalDatePicker
         )
 
-        val manager: RecyclerView.LayoutManager = CalenderLayoutManager(requireContext()).apply {
-            callback = object : CalenderLayoutManager.OnItemSelectedListener {
-                override fun onItemSelected(layoutPosition: Int) {
-                    timeStamp = data[layoutPosition].timeStamp
-                    if (!isPremium) {
-                        when (layoutPosition) {
-                            8, 9 -> viewModel.fetchUsageStats(timeStamp)
-                            else ->
-                                binding.flipper.switch(binding.cardPremiumNotification)
-                        }
-                    } else {
-                        viewModel.fetchUsageStats(timeStamp)
-                    }
-                    horizontalCalendarAdapter.setFillOutLine(layoutPosition)
-                }
+        val manager = CalenderLayoutManager(requireContext())
+        manager.callback = object : ClickListener {
+            override fun onItemClicked(position: Int) {
+                fetchUsageData(position)
             }
         }
 
         //Setting Adapter
-        horizontalCalendarAdapter = CalendarAdapter(requireContext()).apply {
-            setData(data)
-            callback = object : CalendarAdapter.Callback {
-                override fun onItemClicked(position: Int) {
-                    binding.recyclerViewHorizontalDatePicker.smoothScrollToPosition(
-                        position
-                    )
-                }
+        horizontalCalendarAdapter = CalendarAdapter(requireContext())
+        horizontalCalendarAdapter.setData(data)
+        horizontalCalendarAdapter.callback = object : ClickListener {
+            override fun onItemClicked(position: Int) {
+                binding.recyclerViewHorizontalDatePicker.smoothScrollToPosition(position)
+                fetchUsageData(position)
             }
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(260)
-                withContext(Dispatchers.Main) {
-                    binding.recyclerViewHorizontalDatePicker.smoothScrollToPosition(CalendarAdapter.focusedItem!!)
-                }
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(260)
+            withContext(Dispatchers.Main) {
+                binding.recyclerViewHorizontalDatePicker.smoothScrollToPosition(CalendarAdapter.focusedItem!!)
             }
         }
 
         setHorizontalDatePicker(manager)
+    }
+
+    private fun fetchUsageData(layoutPosition: Int) {
+        timeStamp = data[layoutPosition].timeStamp
+        if (!isPremium) {
+            when (layoutPosition) {
+                8, 9 -> viewModel.fetchUsageStats(timeStamp)
+                else ->
+                    binding.flipper.switch(binding.cardPremiumNotification)
+            }
+        } else {
+            viewModel.fetchUsageStats(timeStamp)
+        }
+        horizontalCalendarAdapter.setFillOutLine(layoutPosition)
     }
 
     private fun setHorizontalDatePicker(manager: RecyclerView.LayoutManager) {
