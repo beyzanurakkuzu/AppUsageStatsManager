@@ -1,7 +1,6 @@
 package com.example.appscreentrack.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,7 +70,7 @@ class UsageStatsFragment : Fragment() {
         }
     }
 
-    //Get Calendar
+    // Get Calendar
     private fun initHorizontalDatePicker() {
         // Setting the padding such that the items will appear in the middle of the screen
         ScreenUtils.setPadding(

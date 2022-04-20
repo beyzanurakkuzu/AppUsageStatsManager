@@ -3,6 +3,7 @@ package com.example.appscreentrack.domain.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.appscreentrack.R
 import com.example.appscreentrack.presentation.main.AppState
 import com.example.appscreentrack.domain.repository.UsageStatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +37,7 @@ class UsageStatsViewModel @Inject constructor(
                     else {
                         val keyByIndex = tempHashMap.keys.elementAt(0) // Get key by index.
                         val valueOfElement = tempHashMap.getValue(keyByIndex) // Get value.
-                        tempHashMap["Diğerleri"] = appUsage.totalTime.toFloat() + valueOfElement
+                        tempHashMap[R.string.others.toString()] = appUsage.totalTime.toFloat() + valueOfElement
                     }
                 }
                 withContext(Main) {
