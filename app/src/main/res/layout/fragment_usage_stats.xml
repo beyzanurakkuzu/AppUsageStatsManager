@@ -26,11 +26,12 @@
         android:id="@+id/imageViewActivePin"
         android:layout_width="48dp"
         android:layout_height="wrap_content"
+        android:src="@drawable/shape_app_tab_indicator"
         android:layout_gravity="center_horizontal"
         android:adjustViewBounds="true" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewHorizontalDatePicker"
+        android:id="@+id/recyclerViewCalendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -39,7 +40,6 @@
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/date_item" />
-
 
     <ViewFlipper
         android:id="@+id/flipper"
@@ -176,7 +176,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewHorizontalDatePicker">
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewCalendar">
 
             <ImageView
                 android:id="@+id/emptyIcon"

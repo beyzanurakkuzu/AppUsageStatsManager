@@ -18,6 +18,7 @@ class UsageStatsViewModel @Inject constructor(
     private val repository: UsageStatsRepository
 ) : ViewModel() {
 
+    private val others= "Diğerleri"
     val todayUsageData = MutableLiveData<AppState>()
 
     init {
@@ -37,7 +38,7 @@ class UsageStatsViewModel @Inject constructor(
                     else {
                         val keyByIndex = tempHashMap.keys.elementAt(0) // Get key by index.
                         val valueOfElement = tempHashMap.getValue(keyByIndex) // Get value.
-                        tempHashMap[R.string.others.toString()] = appUsage.totalTime.toFloat() + valueOfElement
+                        tempHashMap[others] = appUsage.totalTime.toFloat() + valueOfElement
                     }
                 }
                 withContext(Main) {
