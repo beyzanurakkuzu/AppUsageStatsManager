@@ -60,7 +60,7 @@ class UsageStatsFragment : Fragment() {
     }
 
     private fun navigateBack() {
-        binding.backAppBar.imgBackButtonClick {
+        binding.backAppBar.imageBackButtonClick {
             Navigation.findNavController(requireView()).popBackStack()
         }
     }

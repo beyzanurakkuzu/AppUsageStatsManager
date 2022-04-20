@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:background="#E5E5E5"
+        android:background="@color/main_background"
         android:clipToPadding="false"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@color/colorSurface"
-                android:backgroundTint="#E5E5E5"
+                android:backgroundTint="@color/main_background"
                 tools:listitem="@layout/usage_row_item" />
         </LinearLayout>
         <!--CONTENT-->
@@ -113,7 +113,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/common_margin">
+                android:padding="6dp">
 
                 <ImageView
                     android:id="@+id/premiumIcon"
